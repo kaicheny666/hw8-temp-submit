@@ -51,9 +51,7 @@ VertexList Graph::edges_from(Vertex vertex) const {
     for (const auto& e : *this) {
         if (e.u == vertex) {
             adj_vertices.push_back(e.v);
-        } else if (e.v == vertex) {
-            adj_vertices.push_back(e.u);
-        }
+        } 
     }
     return adj_vertices;
 }
@@ -61,6 +59,9 @@ VertexList Graph::edges_from(Vertex vertex) const {
 //initialize
 DisjointSet::DisjointSet(int numVertices) {
     subsets.resize(numVertices);
+    for (int i = 0; i < numVertices; ++i) {
+        subsets[i].parent = i;
+    }
 }
 
 void DisjointSet::makeSet(Vertex x) {
