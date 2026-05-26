@@ -37,6 +37,29 @@ void error(string msg) {
     exit(1);
 }
 
+Graph Graph::sort_edges() const {
+    Graph sorted_graph = *this;
+    std::sort(sorted_graph.begin(), sorted_graph.end(),
+              [](const Edge& a, const Edge& b) {
+                return a.weight < b.weight;
+              });
+    return sorted_graph;
+}
+
+VertexList Graph::edges_from(Vertex vertex) const {
+    VertexList adj_vertices;
+    for (const auto& e : *this) {
+        if (e.u == vertex) {
+            adj_vertices.push_back(e.v);
+        } else if (e.v == vertex) {
+            adj_vertices.push_back(e.u);
+        }
+    }
+    return adj_vertices;
+}
+
+
+
 template
     <typename T>
 inline ostream& operator <<(ostream& out, const vector<T> & V)
