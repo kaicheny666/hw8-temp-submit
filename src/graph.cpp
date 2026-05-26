@@ -8,7 +8,7 @@
 #include "graph.h"
 using namespace std;
 
-int sum_weights(EdgeList const& L); {
+int sum_weights(EdgeList const& L) {
     int total = 0;
     for (const auto& edge : L) {
         total += edge.weight;
@@ -59,23 +59,23 @@ VertexList Graph::edges_from(Vertex vertex) const {
 }
 
 //initialize
-Disjointset::DisjointSet(int numVertices) {
+DisjointSet::DisjointSet(int numVertices) {
     subsets.resize(numVertices);
 }
 
-void Disjointset::makeSet(Vertex x) {
-    subsets[x].parents = x;
+void DisjointSet::makeSet(Vertex x) {
+    subsets[x].parent = x;
 }
 
 //find x's root
-Vertex Disjointset::findSet(Vertex x) {
+Vertex DisjointSet::findSet(Vertex x) {
     if (subsets[x].parent != x) {
-        subsets[x].parent = findSet(subsets[x].parents);
+        subsets[x].parent = findSet(subsets[x].parent);
     }
-    return subsets[x].parents;
+    return subsets[x].parent;
 }
 
-void Disjointset::unionSets(Vertex x, Vertex y) {
+void DisjointSet::unionSets(Vertex x, Vertex y) {
     Vertex rootX = findSet(x);
     Vertex rootY = findSet(y);
     if (rootX != rootY) {
@@ -92,7 +92,7 @@ EdgeList Kruskals(const Graph& G) {
     }
     Graph sortedG = G.sort_edges();
     for (const Edge& e : sortedG) {
-        if (ds.findSet(e, u) != ds.findSet(e, v)) {
+        if (ds.findSet(e.u) != ds.findSet(e.v)) {
             F.push_back(e);
             ds.unionSets(e.u, e.v);
         }
