@@ -33,8 +33,7 @@ string get_arg(int argc, char *argv[], string def) {
 }
 
 void error(string msg) {
-    cerr << "Error: " << msg << endl;
-    exit(1);
+    throw std::runtime_error(msg);
 }
 
 Graph Graph::sort_edges() const {
