@@ -84,8 +84,64 @@ void Disjointset::unionSets(Vertex x, Vertex y) {
     }
 }
 
-EdgeList Kruskals(const Graph& G);
+EdgeList Kruskals(const Graph& G) {
+    EdgeList F;
+    DisjointSet ds(G.numVertices);
+    for (Vertex v = 0; v < G.numVertices; ++v) {
+        ds.makeSet(v);
+    }
+    Graph sortedG = G.sort_edges();
+    for (const Edge& e : sortedG) {
+        if (ds.findSet(e, u) != ds.findSet(e, v)) {
+            F.push_back(e);
+            ds.unionSets(e.u, e.v);
+        }
+    }
+    return F;
+}
 
-VertexList dfs(const Graph& graph, Vertex startVertex);
+VertexList dfs(const Graph& graph, Vertex startVertex) {
+    VertexList result;
+    vector<bool> visited(graph.numVertices, false);
+    stack<Vertex> s;
 
-VertexList bfs(const Graph& graph, Vertex startVertex);
+    visited[startVertex] = true;
+    s.push(startVertex);
+
+    while (!s.empty()) {
+        Vertex v = s.top();
+        s.pop();
+        result.push_back(v);
+        VertexList neighbors = graph.edges_from(v);
+        for (Vertex w : neighbors) {
+            if (!visited[w]) {
+                visited[w] = true;
+                s.push(w);
+            }
+        }
+    }
+    return result;
+}
+
+VertexList bfs(const Graph& graph, Vertex startVertex) {
+    VertexList result;
+    vector<bool> visited(graph.numVertices, false);
+    queue<Vertex> q;
+
+    visited[startVertex] = true;
+    q.push(startVertex);
+    while (!q.empty()) {
+        Vertex v = q.front();
+        q.pop();
+        result.push_back(v);
+        VertexList neighbors = graph.edges_from(v);
+        // check all the neighbors
+        for (Vertex w : neighbors) {
+            if (!visited[w]) {
+                visited[w] = true;
+                q.push(w);
+            }
+        } 
+    }
+    return result;
+}
